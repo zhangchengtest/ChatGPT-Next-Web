@@ -1,0 +1,77 @@
+{
+  "sortedMiddleware": [],
+  "middleware": {},
+  "functions": {
+    "/api/config/route": {
+      "env": [
+        "NEXT_PRIVATE_DEBUG_CACHE",
+        "__NEXT_TEST_MAX_ISR_CACHE",
+        "SUSPENSE_CACHE_URL",
+        "SUSPENSE_CACHE_BASEPATH",
+        "SUSPENSE_CACHE_AUTH_TOKEN",
+        "CODE",
+        "OPENAI_API_KEY",
+        "BASE_URL",
+        "PROXY_URL",
+        "VERCEL",
+        "HIDE_USER_API_KEY",
+        "DISABLE_GPT4",
+        "NEXT_OTEL_VERBOSE"
+      ],
+      "files": [
+        "server/middleware-build-manifest.js",
+        "server/middleware-react-loadable-manifest.js",
+        "server/next-font-manifest.js",
+        "server/edge-runtime-webpack.js",
+        "server/app/api/config/route.js"
+      ],
+      "name": "app/api/config/route",
+      "page": "/api/config/route",
+      "matchers": [
+        {
+          "regexp": "^/api/config$",
+          "originalSource": "/api/config"
+        }
+      ],
+      "wasm": [],
+      "assets": []
+    },
+    "/api/openai/[...path]/route": {
+      "env": [
+        "NEXT_PRIVATE_DEBUG_CACHE",
+        "__NEXT_TEST_MAX_ISR_CACHE",
+        "SUSPENSE_CACHE_URL",
+        "SUSPENSE_CACHE_BASEPATH",
+        "SUSPENSE_CACHE_AUTH_TOKEN",
+        "PROTOCOL",
+        "BASE_URL",
+        "OPENAI_ORG_ID",
+        "NEXT_OTEL_VERBOSE",
+        "CODE",
+        "OPENAI_API_KEY",
+        "PROXY_URL",
+        "VERCEL",
+        "HIDE_USER_API_KEY",
+        "DISABLE_GPT4"
+      ],
+      "files": [
+        "server/middleware-build-manifest.js",
+        "server/middleware-react-loadable-manifest.js",
+        "server/next-font-manifest.js",
+        "server/edge-runtime-webpack.js",
+        "server/app/api/openai/[...path]/route.js"
+      ],
+      "name": "app/api/openai/[...path]/route",
+      "page": "/api/openai/[...path]/route",
+      "matchers": [
+        {
+          "regexp": "^/api/openai/(?<path>.+?)$",
+          "originalSource": "/api/openai/[...path]"
+        }
+      ],
+      "wasm": [],
+      "assets": []
+    }
+  },
+  "version": 2
+}
