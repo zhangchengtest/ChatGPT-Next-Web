@@ -9,14 +9,14 @@
         "SUSPENSE_CACHE_URL",
         "SUSPENSE_CACHE_BASEPATH",
         "SUSPENSE_CACHE_AUTH_TOKEN",
+        "NEXT_OTEL_VERBOSE",
         "CODE",
         "OPENAI_API_KEY",
         "BASE_URL",
         "PROXY_URL",
         "VERCEL",
         "HIDE_USER_API_KEY",
-        "DISABLE_GPT4",
-        "NEXT_OTEL_VERBOSE"
+        "DISABLE_GPT4"
       ],
       "files": [
         "server/middleware-build-manifest.js",
@@ -43,10 +43,10 @@
         "SUSPENSE_CACHE_URL",
         "SUSPENSE_CACHE_BASEPATH",
         "SUSPENSE_CACHE_AUTH_TOKEN",
+        "NEXT_OTEL_VERBOSE",
         "PROTOCOL",
         "BASE_URL",
         "OPENAI_ORG_ID",
-        "NEXT_OTEL_VERBOSE",
         "CODE",
         "OPENAI_API_KEY",
         "PROXY_URL",

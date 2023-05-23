@@ -274,6 +274,7 @@ export const useChatStore = create<ChatStore>()(
         // make request
         console.log("[User Input] ", sendMessages);
         api.llm.chat({
+          topic: session.topic,
           messages: sendMessages,
           config: { ...modelConfig, stream: true },
           onUpdate(message) {
@@ -431,6 +432,7 @@ export const useChatStore = create<ChatStore>()(
             }),
           );
           api.llm.chat({
+            topic: session.topic,
             messages: topicMessages,
             config: {
               model: "gpt-3.5-turbo",
@@ -480,6 +482,7 @@ export const useChatStore = create<ChatStore>()(
           modelConfig.sendMemory
         ) {
           api.llm.chat({
+            topic: session.topic,
             messages: toBeSummarizedMsgs.concat({
               role: "system",
               content: Locale.Store.Prompt.Summarize,

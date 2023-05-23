@@ -23,6 +23,7 @@ export interface LLMConfig {
 }
 
 export interface ChatOptions {
+  topic: string;
   messages: RequestMessage[];
   config: LLMConfig;
 

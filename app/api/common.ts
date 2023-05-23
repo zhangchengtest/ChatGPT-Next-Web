@@ -47,7 +47,6 @@ export async function requestOpenai(req: NextRequest) {
 
   try {
     const res = await fetch(fetchUrl, fetchOptions);
-
     if (res.status === 401) {
       // to prevent browser prompt for credentials
       res.headers.delete("www-authenticate");

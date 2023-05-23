@@ -886,6 +886,33 @@ class ChatGPTApi {
                 model: options.config.model
             }
         };
+        if (options.topic) {
+            const mdText = `# ${options.topic}\n\n` + messages.map((m)=>{
+                return m.role === "user" ? `## ${locales/* default.Export.MessageFromYou */.ZP.Export.MessageFromYou}:\n${m.content}` : `## ${locales/* default.Export.MessageFromChatGPT */.ZP.Export.MessageFromChatGPT}:\n${m.content.trim()}`;
+            }).join("\n\n");
+            const dbPayload = {
+                messages,
+                topic: options.topic,
+                content: mdText,
+                stream: options.config.stream,
+                model: modelConfig.model,
+                temperature: modelConfig.temperature,
+                presence_penalty: modelConfig.presence_penalty
+            };
+            // 发送消息到服务器
+            fetch("/myapi/messages", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dbPayload)
+            }).then((response)=>response.json()).then((data)=>{
+                console.log("data ", data);
+            }).catch((error)=>{
+                console.error("Error sending message:", error);
+            });
+        //end
+        }
         const requestPayload = {
             messages,
             stream: options.config.stream,
@@ -894,6 +921,7 @@ class ChatGPTApi {
             presence_penalty: modelConfig.presence_penalty
         };
         console.log("[Request] openai payload: ", requestPayload);
+        //begin
         const shouldStream = !!options.config.stream;
         const controller = new AbortController();
         options.onController?.(controller);
@@ -5924,6 +5952,7 @@ const useChatStore = (0,zustand__WEBPACK_IMPORTED_MODULE_7__/* .create */ .Ue)()
             // make request
             console.log("[User Input] ", sendMessages);
             _client_api__WEBPACK_IMPORTED_MODULE_5__/* .api.llm.chat */ .hi.llm.chat({
+                topic: session.topic,
                 messages: sendMessages,
                 config: {
                     ...modelConfig,
@@ -6029,6 +6058,7 @@ const useChatStore = (0,zustand__WEBPACK_IMPORTED_MODULE_7__/* .create */ .Ue)()
                     content: _locales__WEBPACK_IMPORTED_MODULE_1__/* ["default"].Store.Prompt.Topic */ .ZP.Store.Prompt.Topic
                 }));
                 _client_api__WEBPACK_IMPORTED_MODULE_5__/* .api.llm.chat */ .hi.llm.chat({
+                    topic: session.topic,
                     messages: topicMessages,
                     config: {
                         model: "gpt-3.5-turbo"
@@ -6052,6 +6082,7 @@ const useChatStore = (0,zustand__WEBPACK_IMPORTED_MODULE_7__/* .create */ .Ue)()
             console.log("[Chat History] ", toBeSummarizedMsgs, historyMsgLength, modelConfig.compressMessageLengthThreshold);
             if (historyMsgLength > modelConfig.compressMessageLengthThreshold && modelConfig.sendMemory) {
                 _client_api__WEBPACK_IMPORTED_MODULE_5__/* .api.llm.chat */ .hi.llm.chat({
+                    topic: session.topic,
                     messages: toBeSummarizedMsgs.concat({
                         role: "system",
                         content: _locales__WEBPACK_IMPORTED_MODULE_1__/* ["default"].Store.Prompt.Summarize */ .ZP.Store.Prompt.Summarize,

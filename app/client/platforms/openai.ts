@@ -40,6 +40,46 @@ export class ChatGPTApi implements LLMApi {
       },
     };
 
+    if (options.topic) {
+      const mdText =
+        `# ${options.topic}\n\n` +
+        messages
+          .map((m) => {
+            return m.role === "user"
+              ? `## ${Locale.Export.MessageFromYou}:\n${m.content}`
+              : `## ${Locale.Export.MessageFromChatGPT}:\n${m.content.trim()}`;
+          })
+          .join("\n\n");
+
+      const dbPayload = {
+        messages,
+        topic: options.topic,
+        content: mdText,
+        stream: options.config.stream,
+        model: modelConfig.model,
+        temperature: modelConfig.temperature,
+        presence_penalty: modelConfig.presence_penalty,
+      };
+
+      // 发送消息到服务器
+      fetch("/myapi/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dbPayload),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("data ", data);
+        })
+        .catch((error) => {
+          console.error("Error sending message:", error);
+        });
+
+      //end
+    }
+
     const requestPayload = {
       messages,
       stream: options.config.stream,
@@ -49,6 +89,8 @@ export class ChatGPTApi implements LLMApi {
     };
 
     console.log("[Request] openai payload: ", requestPayload);
+
+    //begin
 
     const shouldStream = !!options.config.stream;
     const controller = new AbortController();
