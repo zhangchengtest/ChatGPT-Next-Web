@@ -154,7 +154,7 @@ export const useChatStore = create<ChatStore>()(
         const session = createEmptySession();
 
         set(() => ({ globalId: get().globalId + 1 }));
-        session.id = get().globalId;
+        session.id = Date.now() + Math.random();
 
         if (mask) {
           session.mask = { ...mask };
@@ -270,6 +270,50 @@ export const useChatStore = create<ChatStore>()(
         const sessionIndex = get().currentSessionIndex;
         const messageIndex = get().currentSession().messages.length + 1;
 
+        console.log("session.id ", session.id);
+
+        if (session.topic) {
+          const mdText =
+            `# ${session.topic}\n\n` +
+            sendMessages
+              .map((m) => {
+                return m.role === "user"
+                  ? `## ${Locale.Export.MessageFromYou}:\n${m.content}`
+                  : `## ${
+                      Locale.Export.MessageFromChatGPT
+                    }:\n${m.content.trim()}`;
+              })
+              .join("\n\n");
+
+          const dbPayload = {
+            sendMessages,
+            reference: session.id,
+            topic: session.topic,
+            content: mdText,
+            model: modelConfig.model,
+            temperature: modelConfig.temperature,
+            presence_penalty: modelConfig.presence_penalty,
+          };
+
+          // 发送消息到服务器
+          fetch("/myapi/messages", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dbPayload),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("data ", data);
+            })
+            .catch((error) => {
+              console.error("Error sending message:", error);
+            });
+
+          //end
+        }
+
         // save user's and bot's message
         get().updateCurrentSession((session) => {
           session.messages.push(userMessage);
@@ -289,6 +333,7 @@ export const useChatStore = create<ChatStore>()(
             set(() => ({}));
           },
           onFinish(message) {
+            console.log("a1");
             botMessage.streaming = false;
             if (message) {
               botMessage.content = message;
@@ -441,6 +486,7 @@ export const useChatStore = create<ChatStore>()(
               model: "gpt-3.5-turbo",
             },
             onFinish(message) {
+              console.log("a2");
               get().updateCurrentSession(
                 (session) =>
                   (session.topic =
@@ -495,6 +541,7 @@ export const useChatStore = create<ChatStore>()(
               session.memoryPrompt = message;
             },
             onFinish(message) {
+              console.log("a3");
               console.log("[Memory] ", message);
               session.lastSummarizeIndex = lastSummarizeIndex;
             },
